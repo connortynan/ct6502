@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.28)
-project(6502)
+project(ct-vic-20)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(6502 main.cpp)
+set(SOURCE_FILES
+        main.cpp
+        Bus.cpp
+        ct6502.cpp
+)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
