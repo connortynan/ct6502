@@ -1,6 +1,12 @@
-#include <iostream>
+#include "cpuViewer.cpp"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    demo_6502 demo;
+
+    if (!demo.init())
+        return 1;
+
+    demo.loop();
+
     return 0;
 }
