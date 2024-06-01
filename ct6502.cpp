@@ -1,8 +1,6 @@
 #include "ct6502.h"
 #include "Bus.h"
 
-#undef OVERFLOW
-
 #define STACK_ADDR 0x0100
 
 ct6502::ct6502() {
@@ -243,16 +241,11 @@ uint16_t ct6502::read(uint16_t addr) const {
 void ct6502::clock() {
     if (cycles == 0) {
         opcode = read(pc++);
-
         cycles = InstrTable[opcode].cycles;
-
         uint8_t additional_cycle1 = (this->*InstrTable[opcode].addr)();
-
         uint8_t additional_cycle2 = (this->*InstrTable[opcode].code)();
-
         cycles += (additional_cycle1 & additional_cycle2);
     }
-
     cycles--;
 }
 
