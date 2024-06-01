@@ -25,7 +25,7 @@ public:
     };
 
     bool init() {
-        if (!LoadProgram("../tests/6502_functional_test.hex", 0x0000, INTEL_HEX))
+        if (!LoadProgram("../6502_functional_test.hex", 0x0000, INTEL_HEX))
             return false;
 
         // Set Reset Vector

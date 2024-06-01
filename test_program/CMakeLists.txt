@@ -4,8 +4,8 @@ project(ct-vic-20)
 set(CMAKE_CXX_STANDARD 17)
 
 set(SOURCE_FILES
-        tests/main.cpp
-        ct6502.cpp
-        tests/EmuTest.cpp
+        main.cpp
+        ../ct6502.cpp
+        EmuTest.cpp
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
