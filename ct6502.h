@@ -86,13 +86,16 @@ private:
 
 private:
     void write(uint16_t addr, uint16_t data);
-    uint16_t read(uint16_t addr) const;
+    [[nodiscard]] uint16_t read(uint16_t addr) const;
 
-    uint8_t GetFlag(ct6502::FLAGS6502 f) const;
+    void PushToStack(uint8_t v);
+    [[nodiscard]] uint8_t PopFromStack();
+
+    [[nodiscard]] uint8_t GetFlag(ct6502::FLAGS6502 f) const;
     void SetFlag(ct6502::FLAGS6502 f, bool v);
 
-    typedef uint8_t (ct6502::*CodeExec)(void);
-    typedef uint8_t (ct6502::*AddrExec)(void);
+    typedef uint8_t (ct6502::*CodeExec)();
+    typedef uint8_t (ct6502::*AddrExec)();
     struct INSTRUCTION {
         CodeExec code;
         AddrExec addr;

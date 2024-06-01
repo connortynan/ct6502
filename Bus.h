@@ -12,7 +12,7 @@ public:
     Bus();
     ~Bus();
 
-public: // Devices connected to bus
+public: // Devices connected to emu
     ct6502 cpu;
     std::array<uint16_t, 64 * 1024> ram;
 
