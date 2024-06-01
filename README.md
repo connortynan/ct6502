@@ -1,4 +1,6 @@
-MOS6502 emulator in C++ 
+# MOS6502 emulator in C++
+
+
 Only implements legal opcodes. All illegal opcodes terminate the program but can be changed to a NOP relatively easily.
 Also has a simple testing program to step through instructions and view memory.
 
