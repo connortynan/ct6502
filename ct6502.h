@@ -19,19 +19,19 @@ public:
         CARRY     = 0x01,
         ZERO      = 0x02,
         INTERRUPT = 0x04,
-        DECIMAL   = 0x08, // unused for now
+        DECIMAL   = 0x08,
         BREAK     = 0x10,
-        CONSTANT  = 0x20, // unused
+        CONSTANT  = 0x20,
         OVERFLOW  = 0x40,
         NEGATIVE  = 0x80,
     };
 
-    uint8_t a = 0x00; // Accumulator register
-    uint8_t x = 0x00; // X register
-    uint8_t y = 0x00; // Y register
+    uint8_t a = 0x00;       // Accumulator register
+    uint8_t x = 0x00;       // X register
+    uint8_t y = 0x00;       // Y register
     uint8_t stk_ptr = 0x00; // Stack pointer
-    uint16_t pc = 0x00; // Program counter
-    uint8_t status = 0x00; // Status register
+    uint16_t pc = 0x00;     // Program counter
+    uint8_t status = 0x00;  // Status register
 
     void connectBus(Bus *b) { bus = b; }
 
