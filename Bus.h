@@ -2,23 +2,17 @@
 #define BUS_H
 
 #include <cstdint>
-#include <array>
-
-#include "ct6502.h"
 
 class Bus {
 
 public:
-    Bus();
-    ~Bus();
+    Bus() = default;
+    ~Bus() = default;
 
-public: // Devices connected to bus
-    ct6502 cpu;
-    std::array<uint16_t, 64 * 1024> ram;
 
 public:
-    void write(uint16_t addr, uint16_t data);
-    [[nodiscard]] uint16_t read(uint16_t addr) const;
+    virtual void write(uint16_t addr, uint16_t data) = 0;
+    [[nodiscard]] virtual uint16_t read(uint16_t addr) const = 0;
 
 };
 
