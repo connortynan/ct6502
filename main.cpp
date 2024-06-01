@@ -1,7 +1,7 @@
-#include "cpuViewer.cpp"
+#include "EmuTest.cpp"
 
 int main() {
-    demo_6502 demo;
+    EmuTest6502 demo;
 
     if (!demo.init())
         return 1;

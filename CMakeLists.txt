@@ -7,6 +7,6 @@ set(SOURCE_FILES
         main.cpp
         Bus.cpp
         ct6502.cpp
-        cpuViewer.cpp
+        EmuTest.cpp
 )
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

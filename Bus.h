@@ -18,7 +18,7 @@ public: // Devices connected to bus
 
 public:
     void write(uint16_t addr, uint16_t data);
-    uint16_t read(uint16_t addr) const;
+    [[nodiscard]] uint16_t read(uint16_t addr) const;
 
 };
 

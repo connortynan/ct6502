@@ -7,224 +7,227 @@
 
 ct6502::ct6502() {
 
-    INSTRUCTION instr;
+    INSTRUCTION in;
     // Fill lookup array with illegal operations
-    instr.code = &ct6502::Op_ILLEGAL;
-    instr.addr = &ct6502::Addr_IMP;
-    instr.cycles = 0;
+    in.code = &ct6502::Op_ILLEGAL;
+    in.addr = &ct6502::Addr_IMP;
+    in.cycles = 0;
     for (auto & i : InstrTable) {
-        i = instr;
+        i = in;
     }
 
     // insert opcodes
+    {
+    // following this ordering: https://www.masswerk.at/6502/6502_instruction_set.html#ADC
     using c = ct6502;
 
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0x69] = instr;
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x6D] = instr;
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x65] = instr;
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0x61] = instr;
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_INY; instr.cycles = 6; InstrTable[0x71] = instr;
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0x75] = instr;
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0x7D] = instr;
-    instr.code = &c::Op_ADC; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0x79] = instr;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0x69] = in;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x65] = in;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0x75] = in;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x6D] = in;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0x7D] = in;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0x79] = in;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0x61] = in;
+    in.code = &c::Op_ADC; in.addr = &c::Addr_INY; in.cycles = 6; InstrTable[0x71] = in;
 
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0x29] = instr;
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x2D] = instr;
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x25] = instr;
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0x21] = instr;
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_INY; instr.cycles = 5; InstrTable[0x31] = instr;
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0x35] = instr;
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0x3D] = instr;
-    instr.code = &c::Op_AND; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0x39] = instr;
+    in.code = &c::Op_AND; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0x29] = in;
+    in.code = &c::Op_AND; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x25] = in;
+    in.code = &c::Op_AND; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0x35] = in;
+    in.code = &c::Op_AND; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x2D] = in;
+    in.code = &c::Op_AND; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0x3D] = in;
+    in.code = &c::Op_AND; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0x39] = in;
+    in.code = &c::Op_AND; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0x21] = in;
+    in.code = &c::Op_AND; in.addr = &c::Addr_INY; in.cycles = 5; InstrTable[0x31] = in;
 
-    instr.code = &c::Op_ASL; instr.addr = &c::Addr_ABS; instr.cycles = 6; InstrTable[0x0E] = instr;
-    instr.code = &c::Op_ASL; instr.addr = &c::Addr_ZER; instr.cycles = 5; InstrTable[0x06] = instr;
-    instr.code = &c::Op_ASL; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x0A] = instr;
-    instr.code = &c::Op_ASL; instr.addr = &c::Addr_ZPX; instr.cycles = 6; InstrTable[0x16] = instr;
-    instr.code = &c::Op_ASL; instr.addr = &c::Addr_ABX; instr.cycles = 7; InstrTable[0x1E] = instr;
+    in.code = &c::Op_ASL; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x0A] = in;
+    in.code = &c::Op_ASL; in.addr = &c::Addr_ZER; in.cycles = 5; InstrTable[0x06] = in;
+    in.code = &c::Op_ASL; in.addr = &c::Addr_ZPX; in.cycles = 6; InstrTable[0x16] = in;
+    in.code = &c::Op_ASL; in.addr = &c::Addr_ABS; in.cycles = 6; InstrTable[0x0E] = in;
+    in.code = &c::Op_ASL; in.addr = &c::Addr_ABX; in.cycles = 7; InstrTable[0x1E] = in;
 
-    instr.code = &c::Op_BCC; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0x90] = instr;
+    in.code = &c::Op_BCC; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0x90] = in;
 
-    instr.code = &c::Op_BCS; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0xB0] = instr;
+    in.code = &c::Op_BCS; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0xB0] = in;
 
-    instr.code = &c::Op_BEQ; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0xF0] = instr;
+    in.code = &c::Op_BEQ; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0xF0] = in;
 
-    instr.code = &c::Op_BIT; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x2C] = instr;
-    instr.code = &c::Op_BIT; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x24] = instr;
+    in.code = &c::Op_BIT; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x24] = in;
+    in.code = &c::Op_BIT; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x2C] = in;
 
-    instr.code = &c::Op_BMI; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0x30] = instr;
+    in.code = &c::Op_BMI; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0x30] = in;
 
-    instr.code = &c::Op_BNE; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0xD0] = instr;
+    in.code = &c::Op_BNE; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0xD0] = in;
 
-    instr.code = &c::Op_BPL; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0x10] = instr;
+    in.code = &c::Op_BPL; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0x10] = in;
 
-    instr.code = &c::Op_BRK; instr.addr = &c::Addr_IMP; instr.cycles = 7; InstrTable[0x00] = instr;
+    in.code = &c::Op_BRK; in.addr = &c::Addr_IMP; in.cycles = 7; InstrTable[0x00] = in;
 
-    instr.code = &c::Op_BVC; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0x50] = instr;
+    in.code = &c::Op_BVC; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0x50] = in;
 
-    instr.code = &c::Op_BVS; instr.addr = &c::Addr_REL; instr.cycles = 2; InstrTable[0x70] = instr;
+    in.code = &c::Op_BVS; in.addr = &c::Addr_REL; in.cycles = 2; InstrTable[0x70] = in;
 
-    instr.code = &c::Op_CLC; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x18] = instr;
+    in.code = &c::Op_CLC; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x18] = in;
 
-    instr.code = &c::Op_CLD; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xD8] = instr;
+    in.code = &c::Op_CLD; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xD8] = in;
 
-    instr.code = &c::Op_CLI; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x58] = instr;
+    in.code = &c::Op_CLI; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x58] = in;
 
-    instr.code = &c::Op_CLV; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xB8] = instr;
+    in.code = &c::Op_CLV; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xB8] = in;
 
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0xC9] = instr;
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0xCD] = instr;
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0xC5] = instr;
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0xC1] = instr;
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_INY; instr.cycles = 3; InstrTable[0xD1] = instr;
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0xD5] = instr;
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0xDD] = instr;
-    instr.code = &c::Op_CMP; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0xD9] = instr;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0xC9] = in;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0xC5] = in;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0xD5] = in;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0xCD] = in;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0xDD] = in;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0xD9] = in;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0xC1] = in;
+    in.code = &c::Op_CMP; in.addr = &c::Addr_INY; in.cycles = 5; InstrTable[0xD1] = in;
 
-    instr.code = &c::Op_CPX; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0xE0] = instr;
-    instr.code = &c::Op_CPX; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0xEC] = instr;
-    instr.code = &c::Op_CPX; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0xE4] = instr;
+    in.code = &c::Op_CPX; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0xE0] = in;
+    in.code = &c::Op_CPX; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0xE4] = in;
+    in.code = &c::Op_CPX; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0xEC] = in;
 
-    instr.code = &c::Op_CPY; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0xC0] = instr;
-    instr.code = &c::Op_CPY; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0xCC] = instr;
-    instr.code = &c::Op_CPY; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0xC4] = instr;
+    in.code = &c::Op_CPY; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0xC0] = in;
+    in.code = &c::Op_CPY; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0xC4] = in;
+    in.code = &c::Op_CPY; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0xCC] = in;
 
-    instr.code = &c::Op_DEC; instr.addr = &c::Addr_ABS; instr.cycles = 6; InstrTable[0xCE] = instr;
-    instr.code = &c::Op_DEC; instr.addr = &c::Addr_ZER; instr.cycles = 5; InstrTable[0xC6] = instr;
-    instr.code = &c::Op_DEC; instr.addr = &c::Addr_ZPX; instr.cycles = 6; InstrTable[0xD6] = instr;
-    instr.code = &c::Op_DEC; instr.addr = &c::Addr_ABX; instr.cycles = 7; InstrTable[0xDE] = instr;
+    in.code = &c::Op_DEC; in.addr = &c::Addr_ZER; in.cycles = 5; InstrTable[0xC6] = in;
+    in.code = &c::Op_DEC; in.addr = &c::Addr_ZPX; in.cycles = 6; InstrTable[0xD6] = in;
+    in.code = &c::Op_DEC; in.addr = &c::Addr_ABS; in.cycles = 6; InstrTable[0xCE] = in;
+    in.code = &c::Op_DEC; in.addr = &c::Addr_ABX; in.cycles = 7; InstrTable[0xDE] = in;
 
-    instr.code = &c::Op_DEX; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xCA] = instr;
+    in.code = &c::Op_DEX; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xCA] = in;
 
-    instr.code = &c::Op_DEY; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x88] = instr;
+    in.code = &c::Op_DEY; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x88] = in;
 
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0x49] = instr;
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x4D] = instr;
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x45] = instr;
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0x41] = instr;
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_INY; instr.cycles = 5; InstrTable[0x51] = instr;
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0x55] = instr;
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0x5D] = instr;
-    instr.code = &c::Op_EOR; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0x59] = instr;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0x49] = in;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x45] = in;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0x55] = in;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x4D] = in;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0x5D] = in;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0x59] = in;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0x41] = in;
+    in.code = &c::Op_EOR; in.addr = &c::Addr_INY; in.cycles = 5; InstrTable[0x51] = in;
 
-    instr.code = &c::Op_INC; instr.addr = &c::Addr_ABS; instr.cycles = 6; InstrTable[0xEE] = instr;
-    instr.code = &c::Op_INC; instr.addr = &c::Addr_ZER; instr.cycles = 5; InstrTable[0xE6] = instr;
-    instr.code = &c::Op_INC; instr.addr = &c::Addr_ZPX; instr.cycles = 6; InstrTable[0xF6] = instr;
-    instr.code = &c::Op_INC; instr.addr = &c::Addr_ABX; instr.cycles = 7; InstrTable[0xFE] = instr;
+    in.code = &c::Op_INC; in.addr = &c::Addr_ZER; in.cycles = 5; InstrTable[0xE6] = in;
+    in.code = &c::Op_INC; in.addr = &c::Addr_ZPX; in.cycles = 6; InstrTable[0xF6] = in;
+    in.code = &c::Op_INC; in.addr = &c::Addr_ABS; in.cycles = 6; InstrTable[0xEE] = in;
+    in.code = &c::Op_INC; in.addr = &c::Addr_ABX; in.cycles = 7; InstrTable[0xFE] = in;
 
-    instr.code = &c::Op_INX; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xE8] = instr;
+    in.code = &c::Op_INX; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xE8] = in;
 
-    instr.code = &c::Op_INY; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xC8] = instr;
+    in.code = &c::Op_INY; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xC8] = in;
 
-    instr.code = &c::Op_JMP; instr.addr = &c::Addr_ABS; instr.cycles = 3; InstrTable[0x4C] = instr;
-    instr.code = &c::Op_JMP; instr.addr = &c::Addr_IND; instr.cycles = 5; InstrTable[0x6C] = instr;
+    in.code = &c::Op_JMP; in.addr = &c::Addr_ABS; in.cycles = 3; InstrTable[0x4C] = in;
+    in.code = &c::Op_JMP; in.addr = &c::Addr_IND; in.cycles = 5; InstrTable[0x6C] = in;
 
-    instr.code = &c::Op_JSR; instr.addr = &c::Addr_ABS; instr.cycles = 6; InstrTable[0x20] = instr;
+    in.code = &c::Op_JSR; in.addr = &c::Addr_ABS; in.cycles = 6; InstrTable[0x20] = in;
 
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0xA9] = instr;
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0xAD] = instr;
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0xA5] = instr;
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0xA1] = instr;
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_INY; instr.cycles = 5; InstrTable[0xB1] = instr;
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0xB5] = instr;
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0xBD] = instr;
-    instr.code = &c::Op_LDA; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0xB9] = instr;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0xA9] = in;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0xA5] = in;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0xB5] = in;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0xAD] = in;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0xBD] = in;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0xB9] = in;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0xA1] = in;
+    in.code = &c::Op_LDA; in.addr = &c::Addr_INY; in.cycles = 5; InstrTable[0xB1] = in;
 
-    instr.code = &c::Op_LDX; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0xA2] = instr;
-    instr.code = &c::Op_LDX; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0xAE] = instr;
-    instr.code = &c::Op_LDX; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0xA6] = instr;
-    instr.code = &c::Op_LDX; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0xBE] = instr;
-    instr.code = &c::Op_LDX; instr.addr = &c::Addr_ZPY; instr.cycles = 4; InstrTable[0xB6] = instr;
+    in.code = &c::Op_LDX; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0xA2] = in;
+    in.code = &c::Op_LDX; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0xA6] = in;
+    in.code = &c::Op_LDX; in.addr = &c::Addr_ZPY; in.cycles = 4; InstrTable[0xB6] = in;
+    in.code = &c::Op_LDX; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0xBE] = in;
+    in.code = &c::Op_LDX; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0xAE] = in;
 
-    instr.code = &c::Op_LDY; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0xA0] = instr;
-    instr.code = &c::Op_LDY; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0xAC] = instr;
-    instr.code = &c::Op_LDY; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0xA4] = instr;
-    instr.code = &c::Op_LDY; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0xB4] = instr;
-    instr.code = &c::Op_LDY; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0xBC] = instr;
+    in.code = &c::Op_LDY; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0xA0] = in;
+    in.code = &c::Op_LDY; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0xA4] = in;
+    in.code = &c::Op_LDY; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0xB4] = in;
+    in.code = &c::Op_LDY; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0xAC] = in;
+    in.code = &c::Op_LDY; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0xBC] = in;
 
-    instr.code = &c::Op_LSR; instr.addr = &c::Addr_ABS; instr.cycles = 6; InstrTable[0x4E] = instr;
-    instr.code = &c::Op_LSR; instr.addr = &c::Addr_ZER; instr.cycles = 5; InstrTable[0x46] = instr;
-    instr.code = &c::Op_LSR; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x4A] = instr;
-    instr.code = &c::Op_LSR; instr.addr = &c::Addr_ZPX; instr.cycles = 6; InstrTable[0x56] = instr;
-    instr.code = &c::Op_LSR; instr.addr = &c::Addr_ABX; instr.cycles = 7; InstrTable[0x5E] = instr;
+    in.code = &c::Op_LSR; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x4A] = in;
+    in.code = &c::Op_LSR; in.addr = &c::Addr_ZER; in.cycles = 5; InstrTable[0x46] = in;
+    in.code = &c::Op_LSR; in.addr = &c::Addr_ZPX; in.cycles = 6; InstrTable[0x56] = in;
+    in.code = &c::Op_LSR; in.addr = &c::Addr_ABS; in.cycles = 6; InstrTable[0x4E] = in;
+    in.code = &c::Op_LSR; in.addr = &c::Addr_ABX; in.cycles = 7; InstrTable[0x5E] = in;
 
-    instr.code = &c::Op_NOP; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xEA] = instr;
+    in.code = &c::Op_NOP; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xEA] = in;
 
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0x09] = instr;
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x0D] = instr;
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x05] = instr;
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0x01] = instr;
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_INY; instr.cycles = 5; InstrTable[0x11] = instr;
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0x15] = instr;
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0x1D] = instr;
-    instr.code = &c::Op_ORA; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0x19] = instr;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0x09] = in;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x05] = in;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0x15] = in;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x0D] = in;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0x1D] = in;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0x19] = in;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0x01] = in;
+    in.code = &c::Op_ORA; in.addr = &c::Addr_INY; in.cycles = 5; InstrTable[0x11] = in;
 
-    instr.code = &c::Op_PHA; instr.addr = &c::Addr_IMP; instr.cycles = 3; InstrTable[0x48] = instr;
+    in.code = &c::Op_PHA; in.addr = &c::Addr_IMP; in.cycles = 3; InstrTable[0x48] = in;
 
-    instr.code = &c::Op_PHP; instr.addr = &c::Addr_IMP; instr.cycles = 3; InstrTable[0x08] = instr;
+    in.code = &c::Op_PHP; in.addr = &c::Addr_IMP; in.cycles = 3; InstrTable[0x08] = in;
 
-    instr.code = &c::Op_PLA; instr.addr = &c::Addr_IMP; instr.cycles = 4; InstrTable[0x68] = instr;
+    in.code = &c::Op_PLA; in.addr = &c::Addr_IMP; in.cycles = 4; InstrTable[0x68] = in;
 
-    instr.code = &c::Op_PLP; instr.addr = &c::Addr_IMP; instr.cycles = 4; InstrTable[0x28] = instr;
+    in.code = &c::Op_PLP; in.addr = &c::Addr_IMP; in.cycles = 4; InstrTable[0x28] = in;
 
-    instr.code = &c::Op_ROL; instr.addr = &c::Addr_ABS; instr.cycles = 6; InstrTable[0x2E] = instr;
-    instr.code = &c::Op_ROL; instr.addr = &c::Addr_ZER; instr.cycles = 5; InstrTable[0x26] = instr;
-    instr.code = &c::Op_ROL; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x2A] = instr;
-    instr.code = &c::Op_ROL; instr.addr = &c::Addr_ZPX; instr.cycles = 6; InstrTable[0x36] = instr;
-    instr.code = &c::Op_ROL; instr.addr = &c::Addr_ABX; instr.cycles = 7; InstrTable[0x3E] = instr;
+    in.code = &c::Op_ROL; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x2A] = in;
+    in.code = &c::Op_ROL; in.addr = &c::Addr_ZER; in.cycles = 5; InstrTable[0x26] = in;
+    in.code = &c::Op_ROL; in.addr = &c::Addr_ZPX; in.cycles = 6; InstrTable[0x36] = in;
+    in.code = &c::Op_ROL; in.addr = &c::Addr_ABS; in.cycles = 6; InstrTable[0x2E] = in;
+    in.code = &c::Op_ROL; in.addr = &c::Addr_ABX; in.cycles = 7; InstrTable[0x3E] = in;
 
-    instr.code = &c::Op_ROR; instr.addr = &c::Addr_ABS; instr.cycles = 6; InstrTable[0x6E] = instr;
-    instr.code = &c::Op_ROR; instr.addr = &c::Addr_ZER; instr.cycles = 5; InstrTable[0x66] = instr;
-    instr.code = &c::Op_ROR; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x6A] = instr;
-    instr.code = &c::Op_ROR; instr.addr = &c::Addr_ZPX; instr.cycles = 6; InstrTable[0x76] = instr;
-    instr.code = &c::Op_ROR; instr.addr = &c::Addr_ABX; instr.cycles = 7; InstrTable[0x7E] = instr;
+    in.code = &c::Op_ROR; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x6A] = in;
+    in.code = &c::Op_ROR; in.addr = &c::Addr_ZER; in.cycles = 5; InstrTable[0x66] = in;
+    in.code = &c::Op_ROR; in.addr = &c::Addr_ZPX; in.cycles = 6; InstrTable[0x76] = in;
+    in.code = &c::Op_ROR; in.addr = &c::Addr_ABS; in.cycles = 6; InstrTable[0x6E] = in;
+    in.code = &c::Op_ROR; in.addr = &c::Addr_ABX; in.cycles = 7; InstrTable[0x7E] = in;
 
-    instr.code = &c::Op_RTI; instr.addr = &c::Addr_IMP; instr.cycles = 6; InstrTable[0x40] = instr;
+    in.code = &c::Op_RTI; in.addr = &c::Addr_IMP; in.cycles = 6; InstrTable[0x40] = in;
 
-    instr.code = &c::Op_RTS; instr.addr = &c::Addr_IMP; instr.cycles = 6; InstrTable[0x60] = instr;
+    in.code = &c::Op_RTS; in.addr = &c::Addr_IMP; in.cycles = 6; InstrTable[0x60] = in;
 
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_IMM; instr.cycles = 2; InstrTable[0xE9] = instr;
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0xED] = instr;
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0xE5] = instr;
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0xE1] = instr;
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_INY; instr.cycles = 5; InstrTable[0xF1] = instr;
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0xF5] = instr;
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_ABX; instr.cycles = 4; InstrTable[0xFD] = instr;
-    instr.code = &c::Op_SBC; instr.addr = &c::Addr_ABY; instr.cycles = 4; InstrTable[0xF9] = instr;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_IMM; in.cycles = 2; InstrTable[0xE9] = in;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0xE5] = in;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0xF5] = in;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0xED] = in;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_ABX; in.cycles = 4; InstrTable[0xFD] = in;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_ABY; in.cycles = 4; InstrTable[0xF9] = in;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0xE1] = in;
+    in.code = &c::Op_SBC; in.addr = &c::Addr_INY; in.cycles = 5; InstrTable[0xF1] = in;
 
-    instr.code = &c::Op_SEC; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x38] = instr;
+    in.code = &c::Op_SEC; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x38] = in;
 
-    instr.code = &c::Op_SED; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xF8] = instr;
+    in.code = &c::Op_SED; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xF8] = in;
 
-    instr.code = &c::Op_SEI; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x78] = instr;
+    in.code = &c::Op_SEI; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x78] = in;
 
-    instr.code = &c::Op_STA; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x8D] = instr;
-    instr.code = &c::Op_STA; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x85] = instr;
-    instr.code = &c::Op_STA; instr.addr = &c::Addr_INX; instr.cycles = 6; InstrTable[0x81] = instr;
-    instr.code = &c::Op_STA; instr.addr = &c::Addr_INY; instr.cycles = 6; InstrTable[0x91] = instr;
-    instr.code = &c::Op_STA; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0x95] = instr;
-    instr.code = &c::Op_STA; instr.addr = &c::Addr_ABX; instr.cycles = 5; InstrTable[0x9D] = instr;
-    instr.code = &c::Op_STA; instr.addr = &c::Addr_ABY; instr.cycles = 5; InstrTable[0x99] = instr;
+    in.code = &c::Op_STA; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x85] = in;
+    in.code = &c::Op_STA; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0x95] = in;
+    in.code = &c::Op_STA; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x8D] = in;
+    in.code = &c::Op_STA; in.addr = &c::Addr_ABX; in.cycles = 5; InstrTable[0x9D] = in;
+    in.code = &c::Op_STA; in.addr = &c::Addr_ABY; in.cycles = 5; InstrTable[0x99] = in;
+    in.code = &c::Op_STA; in.addr = &c::Addr_INX; in.cycles = 6; InstrTable[0x81] = in;
+    in.code = &c::Op_STA; in.addr = &c::Addr_INY; in.cycles = 6; InstrTable[0x91] = in;
 
-    instr.code = &c::Op_STX; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x8E] = instr;
-    instr.code = &c::Op_STX; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x86] = instr;
-    instr.code = &c::Op_STX; instr.addr = &c::Addr_ZPY; instr.cycles = 4; InstrTable[0x96] = instr;
+    in.code = &c::Op_STX; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x86] = in;
+    in.code = &c::Op_STX; in.addr = &c::Addr_ZPY; in.cycles = 4; InstrTable[0x96] = in;
+    in.code = &c::Op_STX; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x8E] = in;
 
-    instr.code = &c::Op_STY; instr.addr = &c::Addr_ABS; instr.cycles = 4; InstrTable[0x8C] = instr;
-    instr.code = &c::Op_STY; instr.addr = &c::Addr_ZER; instr.cycles = 3; InstrTable[0x84] = instr;
-    instr.code = &c::Op_STY; instr.addr = &c::Addr_ZPX; instr.cycles = 4; InstrTable[0x94] = instr;
+    in.code = &c::Op_STY; in.addr = &c::Addr_ZER; in.cycles = 3; InstrTable[0x84] = in;
+    in.code = &c::Op_STY; in.addr = &c::Addr_ZPX; in.cycles = 4; InstrTable[0x94] = in;
+    in.code = &c::Op_STY; in.addr = &c::Addr_ABS; in.cycles = 4; InstrTable[0x8C] = in;
 
-    instr.code = &c::Op_TAX; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xAA] = instr;
+    in.code = &c::Op_TAX; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xAA] = in;
 
-    instr.code = &c::Op_TAY; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xA8] = instr;
+    in.code = &c::Op_TAY; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xA8] = in;
 
-    instr.code = &c::Op_TSX; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0xBA] = instr;
+    in.code = &c::Op_TSX; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0xBA] = in;
 
-    instr.code = &c::Op_TXA; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x8A] = instr;
+    in.code = &c::Op_TXA; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x8A] = in;
 
-    instr.code = &c::Op_TXS; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x9A] = instr;
+    in.code = &c::Op_TXS; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x9A] = in;
 
-    instr.code = &c::Op_TYA; instr.addr = &c::Addr_IMP; instr.cycles = 2; InstrTable[0x98] = instr;
+    in.code = &c::Op_TYA; in.addr = &c::Addr_IMP; in.cycles = 2; InstrTable[0x98] = in;
+    }
 }
 
 ct6502::~ct6502() = default;
@@ -253,6 +256,18 @@ void ct6502::clock() {
     cycles--;
 }
 
+void ct6502::PushToStack(uint8_t v) {
+    write(STACK_ADDR + stk_ptr, v);
+    if (stk_ptr == 0x00) stk_ptr = 0xFF;
+    else stk_ptr--;
+}
+
+uint8_t ct6502::PopFromStack() {
+    if (stk_ptr == 0xFF) stk_ptr = 0x00;
+    else stk_ptr++;
+    return read(STACK_ADDR + stk_ptr);
+}
+
 void ct6502::reset() {
     a = 0;
     x = 0;
@@ -274,16 +289,13 @@ void ct6502::reset() {
 
 void ct6502::irq() {
     if (GetFlag(INTERRUPT) == 0) {
-        write(STACK_ADDR + stk_ptr, (pc >> 8) & 0x00FF);
-        stk_ptr--;
-        write(STACK_ADDR + stk_ptr, pc & 0x00FF);
-        stk_ptr--;
+        PushToStack((pc >> 8) & 0x00FF);
+        PushToStack(pc & 0x00FF);
 
         SetFlag(BREAK, false);
-        SetFlag(CONSTANT, true);
+//        SetFlag(CONSTANT, true);
         SetFlag(INTERRUPT, true);
-        write(STACK_ADDR + stk_ptr, status);
-        stk_ptr--;
+        PushToStack(status);
 
         addr_abs = 0xFFFE;
         uint16_t lo = read(addr_abs + 0);
@@ -295,16 +307,13 @@ void ct6502::irq() {
 }
 
 void ct6502::nmi() {
-    write(STACK_ADDR + stk_ptr, (pc >> 8) & 0x00FF);
-    stk_ptr--;
-    write(STACK_ADDR + stk_ptr, pc & 0x00FF);
-    stk_ptr--;
+    PushToStack((pc >> 8) & 0x00FF);
+    PushToStack(pc & 0x00FF);
 
     SetFlag(BREAK, false);
-    SetFlag(CONSTANT, true);
+//    SetFlag(CONSTANT, true);
     SetFlag(INTERRUPT, true);
-    write(STACK_ADDR + stk_ptr, status);
-    stk_ptr--;
+    PushToStack(status);
 
     addr_abs = 0xFFFA;
     uint16_t lo = read(addr_abs + 0);
@@ -434,13 +443,24 @@ uint8_t ct6502::Op_ILLEGAL() {
 
 
 uint8_t ct6502::Op_ADC() {
-    // https://youtu.be/8XmxKPJDGU0?si=kscBnFep_h_t5Dla&t=2856
     fetch();
     tmp = (uint16_t)a + (uint16_t)fetched + (uint16_t)GetFlag(CARRY);
-    SetFlag(CARRY, tmp > 255);
     SetFlag(ZERO, (tmp & 0x00FF) == 0);
-    SetFlag(NEGATIVE, tmp & 0x80);
-    SetFlag(OVERFLOW, (~((uint16_t)a ^ (uint16_t)fetched & ((uint16_t)a ^ (uint16_t)tmp)) & 0x0080));
+
+    if (GetFlag(DECIMAL)) {
+        if (((a & 0x000F) + (fetched & 0x000F) + (uint16_t)GetFlag(CARRY)) > 9) tmp += 6;
+        SetFlag(NEGATIVE, tmp & 0x80);
+        SetFlag(OVERFLOW, (~((uint16_t)a ^ (uint16_t)fetched) & ((uint16_t)a ^ (uint16_t)tmp) & 0x0080));
+        if (tmp > 0x99) {
+            tmp += 96;
+        }
+        SetFlag(CARRY, tmp > 0x99);
+    }
+    else {
+        SetFlag(CARRY, tmp > 0xFF);
+        SetFlag(NEGATIVE, tmp & 0x80);
+        SetFlag(OVERFLOW, (~((uint16_t)a ^ (uint16_t)fetched) & ((uint16_t)a ^ (uint16_t)tmp)) & 0x0080);
+    }
     a = tmp & 0x00FF;
     return 1;
 }
@@ -544,18 +564,11 @@ uint8_t ct6502::Op_BPL() {
 
 uint8_t ct6502::Op_BRK() {
     pc++;
+    PushToStack((pc >> 8) & 0x00FF);
+    PushToStack(pc & 0x00FF);
+    PushToStack(status | CONSTANT | BREAK);
     SetFlag(INTERRUPT, true);
-    write(STACK_ADDR + stk_ptr, (pc >> 8) & 0x00FF);
-    stk_ptr--;
-    write(STACK_ADDR + stk_ptr, pc & 0x00FF);
-    stk_ptr--;
-
-    SetFlag(BREAK, true);
-    write(STACK_ADDR + stk_ptr, status);
-    stk_ptr--;
-    SetFlag(BREAK, false);
-
-    pc = (uint16_t)read(0xFFFE) | ((uint16_t)read(0xFFFF) << 8);
+    pc = ((uint16_t)read(0xFFFF) << 8) | ((uint16_t)read(0xFFFE));
     return 0;
 }
 
@@ -690,10 +703,8 @@ uint8_t ct6502::Op_JMP() {
 uint8_t ct6502::Op_JSR() {
     pc--;
 
-    write(STACK_ADDR + stk_ptr, (pc >> 8) & 0x00FF);
-    stk_ptr--;
-    write(STACK_ADDR + stk_ptr, pc & 0x00FF);
-    stk_ptr--;
+    PushToStack((pc >> 8) & 0x00FF);
+    PushToStack(pc & 0x00FF);
 
     pc = addr_abs;
     return 0;
@@ -749,31 +760,24 @@ uint8_t ct6502::Op_ORA() {
 }
 
 uint8_t ct6502::Op_PHA() {
-    write(STACK_ADDR + stk_ptr, a);
-    stk_ptr--;
+    PushToStack(a);
     return 0;
 }
 
 uint8_t ct6502::Op_PHP() {
-    write(STACK_ADDR + stk_ptr, status | BREAK | CONSTANT);
-    SetFlag(BREAK, false);
-    SetFlag(CONSTANT, false);
-    stk_ptr--;
+    PushToStack(status | BREAK | CONSTANT);
     return 0;
 }
 
 uint8_t ct6502::Op_PLA() {
-    stk_ptr++;
-    a = read(STACK_ADDR + stk_ptr);
+    a = PopFromStack();
     SetFlag(ZERO, a == 0x00);
     SetFlag(NEGATIVE, a & 0x80);
     return 0;
 }
 
 uint8_t ct6502::Op_PLP() {
-    stk_ptr++;
-    status = read(STACK_ADDR + stk_ptr);
-    SetFlag(CONSTANT, true);
+    status = PopFromStack() | BREAK | CONSTANT;
     return 0;
 }
 
@@ -793,7 +797,7 @@ uint8_t ct6502::Op_ROL() {
 uint8_t ct6502::Op_ROR() {
     fetch();
     tmp = (uint16_t)(GetFlag(CARRY) << 7) | (fetched>>1);
-    SetFlag(CARRY, tmp & 0x0001);
+    SetFlag(CARRY, fetched & 0x0001);
     SetFlag(ZERO, (tmp & 0x00FF) == 0);
     SetFlag(NEGATIVE, tmp & 0x0080);
     if (InstrTable[opcode].addr == &ct6502::Addr_IMP)
@@ -804,23 +808,16 @@ uint8_t ct6502::Op_ROR() {
 }
 
 uint8_t ct6502::Op_RTI() {
-    stk_ptr++;
-    status = read(STACK_ADDR + stk_ptr);
-    stk_ptr &= ~BREAK;
-    stk_ptr &= ~CONSTANT;
+    status = PopFromStack() | CONSTANT | BREAK;
 
-    stk_ptr++;
-    pc = (uint16_t)read(STACK_ADDR + stk_ptr);
-    stk_ptr++;
-    pc |= (uint16_t)read(STACK_ADDR + stk_ptr) << 8;
+    pc = (uint16_t)PopFromStack();
+    pc |= (uint16_t)PopFromStack() << 8;
     return 0;
 }
 
 uint8_t ct6502::Op_RTS() {
-    stk_ptr++;
-    pc = (uint16_t)read(STACK_ADDR + stk_ptr);
-    stk_ptr++;
-    pc |= (uint16_t)read(STACK_ADDR + stk_ptr) << 8;
+    pc = (uint16_t)PopFromStack();
+    pc |= (uint16_t)PopFromStack() << 8;
 
     pc++;
     return 0;
@@ -829,11 +826,19 @@ uint8_t ct6502::Op_RTS() {
 uint8_t ct6502::Op_SBC() {
     fetch();
     uint16_t val = ((uint16_t)fetched) ^ 0x00FF;
-    tmp = (uint16_t)a + (uint16_t)val + (uint16_t)GetFlag(CARRY);
-    SetFlag(CARRY, tmp > 255);
-    SetFlag(ZERO, (tmp & 0x00FF) == 0);
-    SetFlag(NEGATIVE, tmp & 0x80);
+    tmp = (uint16_t)a + val + (uint16_t)GetFlag(CARRY);
+    SetFlag(ZERO, ((tmp & 0x00FF) == 0));
+    SetFlag(NEGATIVE, tmp & 0x0080);
     SetFlag(OVERFLOW, (tmp ^ (uint16_t)a) & (tmp ^ val) & 0x0080);
+    if (GetFlag(DECIMAL)) {
+        if ( (((uint16_t)a & 0x0F) - (uint16_t)(GetFlag(CARRY) ? 0 : 1)) < (fetched & 0x0F))
+            tmp -= 6;
+        if (tmp > 0x99) {
+            tmp -= 0x60;
+        }
+    }
+
+    SetFlag(CARRY, tmp & 0xFF00);
     a = tmp & 0x00FF;
     return 1;
 }
