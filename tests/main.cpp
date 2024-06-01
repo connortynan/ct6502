@@ -5,7 +5,6 @@ int main() {
 
     if (!demo.init())
         return 1;
-
     demo.loop();
 
     return 0;

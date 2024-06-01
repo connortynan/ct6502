@@ -2,10 +2,11 @@
 #define CT6502_H
 
 #include <cstdint>
+#include "Bus.h"
 
 #undef OVERFLOW
 
-class Bus;
+class SimpleRamBus;
 
 class ct6502 {
 

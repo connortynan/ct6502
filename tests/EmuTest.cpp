@@ -2,10 +2,9 @@
 #include <iostream>
 #include <sstream>
 #include <conio.h>
-#include <windows.h>
 #include <fstream>
 
-#include "Bus.h"
+#include "SimpleRamBus.h"
 
 #define DEFAULT_TEXT "\033[39m\033[49m\033[0m"
 #define RED   "\033[38;2;255;0;0m"
@@ -17,7 +16,7 @@
 class EmuTest6502 {
 
 public:
-    Bus emu;
+    SimpleRamBus emu;
 
     enum PROGRAM_FORMAT {
         PLAIN_HEX,
